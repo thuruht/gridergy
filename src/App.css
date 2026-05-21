@@ -1,0 +1,94 @@
+/* Strict vanilla CSS, NO Tailwind */
+:root {
+  --bg-dark: #030303;
+  --text-light: #f5f5f5;
+  --accent-green: #00ff88;
+  --accent-red: #ff3366;
+  --border-dim: #333;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin: 0;
+}
+
+/* 7 Zone CSS Grid Topology */
+.topology-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.zone-card {
+  background: #111;
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.zone-header {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.zone-price {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+}
+
+.status-dot.congested {
+  background-color: var(--accent-red);
+}
+
+.webln-btn {
+  background: transparent;
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.webln-btn:hover {
+  background: rgba(0, 255, 136, 0.1);
+}
