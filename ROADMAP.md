@@ -1,33 +1,44 @@
-# Gridergy - Go-Live Roadmap & To-Do List
+# Gridergy Protocol Rebuild (2026) - Go-Live Roadmap
 
-This document outlines the required steps to transition Gridergy from its current beta/simulated state into a production-ready application.
+This document outlines the strategic roadmap for transitioning Gridergy to its highly scalable, decentralized 2026 protocol architecture. The stack relies heavily on Cloudflare's edge compute (Workers, Durable Objects, D1, KV, Vectorize, and Containers) and a strictly non-Tailwind React PWA.
 
-## Phase 1: Authentication & User Profiles (Real Auth)
-- [ ] **Remove "Guest" Access:** Phase out the current guest/paper mode as the default.
-- [ ] **Implement Authentication System:**
-  - *Recommendation:* Given the decentralized nature, consider **LNURL-auth** (Lightning Network authentication) alongside standard Email/Password + JWT.
-- [ ] **User Sessions:** Ensure backend validates auth tokens for every WebSocket connection to prevent unauthorized access to user balances.
-- [ ] **Database Integration:** Map users to their respective energy credits (`total_kwh`) and Lightning balances (`total_sats`).
+## Phase 1: Frontend Overhaul (React PWA + GSAP)
+*Can happen in parallel with Backend updates.*
+- [ ] **Aesthetic Rewrite:** Fully adopt the dark-mode node topology aesthetic from the provided 2026 design screenshots.
+- [ ] **CSS Architecture:** Remove all utility classes (e.g., Tailwind). Strictly enforce vanilla CSS using CSS Grid.
+- [ ] **Animation Engine:** Integrate GSAP 3 for all topology and metric animations (dotted lines, node pulsing, data flow visualizations).
+- [ ] **Dashboard Layout:** Implement custom headers (FAQ, PAPER, Synced status, Guest/User profile) and core metrics (Energy Credits in kWh, Total Volume in SATS).
+- [ ] **PWA Configuration:** Ensure offline capabilities, service workers, and app manifest for a true Progressive Web App experience.
 
-## Phase 2: Live Grid Data Integration (Real ERCOT Data)
-- [ ] **Data Sourcing:** Integrate with a live ERCOT API provider (e.g., GridStatus API, or direct ERCOT public API).
-- [ ] **Replace Simulation:** Strip out the `SIM_NODE_X` logic and replace it with real Locational Marginal Pricing (LMP) and congestion maps.
-- [ ] **Real-time Pipeline:** Update the backend WebSocket broadcaster to stream real LMP ticks instead of simulated intervals.
+## Phase 2: Cloudflare Backend Evolution (Workers & Services)
+- [ ] **Wrangler Bindings Update:**
+  - Ensure `D1` (`DB`) and `Durable Objects` (`ISO_STREAMER`) remain robust.
+  - Integrate `Workers KV` (`RATE_LIMIT`) for edge-based DDoS protection and API rate limiting.
+  - Bind the Cloudflare `Email Service` (`SEND_EMAIL`) for automated notifications, alerts, and user comms.
+- [ ] **WebSocket & State Management:** Solidify the `IsoStreamer` Durable Object to handle thousands of concurrent WSS connections securely without state desync.
 
-## Phase 3: Payments & Regulatory Compliance
-- [ ] **LNBits Evaluation:**
-  - Continue utilizing LNBits for V1 as an excellent accounting layer.
-  - *Regulatory Note:* Using LNBits **does not** automatically remove regulatory burden if you are operating a custodial wallet (holding user SATS). If users deposit SATS into a central pool that you control, you may be considered a Money Services Business (MSB).
-- [ ] **Legal Consultation:** Speak with a legal expert regarding KYC/AML requirements for energy-credit-to-sats swaps.
-- [ ] **Non-Custodial Evaluation:** Investigate if non-custodial Lightning solutions (like Greenlight or Mutiny) could reduce the regulatory footprint in the future.
-- [ ] **Production Node:** Ensure the backend LNBits instance is connected to a well-funded, well-routed Lightning Node for reliable invoice generation and payment routing.
+## Phase 3: ERCOT Data Ingestion & Scraping
+- [ ] **FastAPI Scraper Development:** Build a dedicated Python FastAPI service to scrape and normalize live ERCOT data (LMP, congestion).
+- [ ] **Cloudflare Containers:** Deploy the FastAPI scraper to Cloudflare Containers.
+- [ ] **Internal Routing:** Set up secure, private communication between the FastAPI Container and the primary Cloudflare Worker/Durable Object to feed real-time grid ticks.
 
-## Phase 4: Security & Infrastructure
-- [ ] **HTTPS / WSS:** Enforce SSL for all web traffic and Secure WebSockets (WSS) for the real-time data feed.
-- [ ] **Rate Limiting:** Fine-tune the rate limiter (already visible in previous snippets) to protect against DDoS and abuse.
-- [ ] **Audit WebSockets:** Ensure users cannot spoof `total_kwh` or `total_sats_spent` payloads over WebSockets. (All balance calculations *must* happen server-side).
+## Phase 4: Vectorize & AI Integration
+- [ ] **Vector Indexing (`tutorial-index`):** Utilize Cloudflare Vectorize to store embedded ERCOT historical data, node pricing, and grid events.
+- [ ] **Predictive Modeling:** Leverage vector similarity search to predict grid congestion events and price spikes.
+- [ ] **AI Search:** Implement a semantic search feature (perhaps in the FAQ or node explorer) utilizing the vectorized data.
 
-## Phase 5: Testing & Launch
-- [ ] **Load Testing:** Simulate 100+ concurrent WebSocket connections to ensure backend stability.
-- [ ] **Beta Testing:** Invite a small group of users to test deposits, paper mode vs real mode, and real-time ERCOT tracking.
-- [ ] **Go Live:** Point `gridergy.distorted.work` to the production environment and announce.
+## Phase 5: Non-Custodial Lightning Payments
+- [ ] **Pivot from Custodial LNBits:** Transition away from central accounting to maintain a strictly non-custodial protocol.
+- [ ] **Evaluate Non-Custodial Tech:** Research and integrate solutions like Blockstream Greenlight, Mutiny Node, or Phoenixd.
+- [ ] **Direct Settlement:** Ensure energy-credit-to-SATS swaps settle directly to user-controlled keys.
+- [ ] **LNURL-auth:** Implement decentralized authentication using Lightning keys.
+
+## Phase 6: Testing, Security & Production Launch
+- [ ] **Load Testing:** Push concurrent limits on the Durable Object WebSocket implementation.
+- [ ] **Smart Contract/Protocol Audit:** Ensure all logic handling credits and routing is sound.
+- [ ] **Production DNS:** Go live on `gridergy.distorted.work` via Cloudflare Pages/Workers routing.
+
+## Phase 7: User Profiles & R2 Storage
+- [ ] **R2 Binding (`ASSETS`):** Ensure the `ASSETS` R2 bucket (visible in Cloudflare dashboard) is correctly bound in `wrangler.toml`.
+- [ ] **Profile Avatars:** Implement frontend file upload functionality to allow users to set custom profile pictures.
+- [ ] **Storage API:** Create backend Worker routes to handle pre-signed URLs for uploading and fetching images directly from the R2 bucket.
