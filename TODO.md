@@ -15,7 +15,7 @@ This document lists the concrete, actionable tasks required to execute the [ROAD
   - [ ] Display `ENERGY CREDITS (kWh)`.
   - [ ] Display `TOTAL VOLUME (SATS)`.
 - [ ] Implement Node Topology Map:
-  - [ ] Lay out the 15 `SIM_NODE_X` nodes in the CSS Grid exactly as shown in the designs.
+  - [ ] Lay out the node topology in the CSS Grid dynamically (mutable based on data granularity).
   - [ ] Render connecting dotted lines between nodes.
 - [ ] Integrate GSAP 3:
   - [ ] Animate node data updates (color changes, pulses).
@@ -57,3 +57,4 @@ This document lists the concrete, actionable tasks required to execute the [ROAD
 - [ ] Create API route in `src/worker.ts` to generate pre-signed R2 upload URLs.
 - [ ] Implement avatar upload UI in the React frontend (User Profile section).
 - [ ] Store R2 avatar object keys in the `gridergy-db` D1 database linked to the user's profile.
+  - [ ] **Crucial:** Ensure the entire frontend is completely functional and properly hooked into the backend WebSocket and API routes.
